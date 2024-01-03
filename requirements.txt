@@ -3,7 +3,7 @@ defusedxml==0.7.1
 diff-match-patch==20230430
 Django==5.0.1
 django-import-export==3.3.5
-django-pyodbc-azure==2.1.0.0
+# django-pyodbc-azure==2.1.0.0
 et-xmlfile==1.1.0
 MarkupPy==1.14
 odfpy==1.4.1
