@@ -21,23 +21,24 @@ class Location(models.Model):
         verbose_name_plural = 'Locations'
 
 
-class Reservation(models.Model):
-    persons_reserved = models.IntegerField(null=True, blank=True)
-    location= models.ForeignKey(Location, on_delete=models.PROTECT)
+# class Reservation(models.Model):
+#     persons_reserved = models.IntegerField(null=True, blank=True)
+#     location= models.ForeignKey(Location, on_delete=models.PROTECT)
 
-    class Meta:
-        verbose_name = 'Reservation'
-        verbose_name_plural = 'Reservations'
+#     class Meta:
+#         verbose_name = 'Reservation'
+#         verbose_name_plural = 'Reservations'
 
-    def save(self, *args, **kwargs):
-        print(f"saving reservation {self.guest_set}")
-        super(Reservation, self).save(*args, **kwargs) 
+#     def save(self, *args, **kwargs):
+#         print(f"saving reservation {self.guest_set}")
+#         super(Reservation, self).save(*args, **kwargs) 
 
 class Guest(models.Model):
     guest_name = models.TextField()
     city = models.TextField(null=True, blank=True)
     mobile_no = models.CharField(max_length=10)
     ext_reg_no = models.IntegerField(null=True, blank=True)
+    location = models.ForeignKey(Location, on_delete=models.PROTECT, blank=True, null=True)
     remark = models.TextField(null=True, blank=True)
     no_of_persons = models.IntegerField(null=True, blank=True)
     arrival_date = models.DateTimeField(null=True, blank=True)
@@ -47,7 +48,7 @@ class Guest(models.Model):
     state = models.TextField(null=True, blank=True)
     country = models.TextField(null=True, blank=True)
     mandal = models.TextField(null=True, blank=True)
-    reservation = models.ForeignKey(Reservation, on_delete=models.PROTECT, blank=True, null=True)
+    # reservation = models.ForeignKey(Reservation, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return self.guest_name
