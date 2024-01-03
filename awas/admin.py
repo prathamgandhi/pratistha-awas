@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
-from .models import Guest, Location #, Reservation
+from .models import Guest, Location, Cities, States, Districts, Countries, UserRegistration #, Reservation
 
 from import_export import fields, resources
 from import_export.admin import ImportExportMixin
@@ -109,6 +109,86 @@ class LocationAdmin(ImportExportMixin, admin.ModelAdmin):
 #         print(obj)
 #         super().save_model(request, obj, form, change)
 
+class CitiesAdmin(admin.ModelAdmin):
+    using = 'remote'
+
+    def get_queryset(self, request):
+        return super(CitiesAdmin, self).get_queryset(request).using(self.using)
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+class DistrictsAdmin(admin.ModelAdmin):
+    using = 'remote'
+
+    def get_queryset(self, request):
+        return super(DistrictsAdmin, self).get_queryset(request).using(self.using)
+    
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+class StatesAdmin(admin.ModelAdmin):
+    using = 'remote'
+
+    def get_queryset(self, request):
+        return super(StatesAdmin, self).get_queryset(request).using(self.using)
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+class CountriesAdmin(admin.ModelAdmin):
+    using = 'remote'
+
+    def get_queryset(self, request):
+        return super(CountriesAdmin, self).get_queryset(request).using(self.using)
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+class UserRegistrationAdmin(admin.ModelAdmin):
+    using = 'remote'
+
+    def get_queryset(self, request):
+        return super(UserRegistrationAdmin, self).get_queryset(request).using(self.using)
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 admin.site.register(Guest, GuestAdmin)
 admin.site.register(Location, LocationAdmin)
+admin.site.register(Cities, CitiesAdmin)
+admin.site.register(Districts, DistrictsAdmin)
+admin.site.register(States, StatesAdmin)
+admin.site.register(Countries, CountriesAdmin)
+admin.site.register(UserRegistration, UserRegistrationAdmin)
 # admin.site.register(Reservation, ReservationAdmin)
