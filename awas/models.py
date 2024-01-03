@@ -30,8 +30,8 @@ class Reservation(models.Model):
         verbose_name_plural = 'Reservations'
 
     def save(self, *args, **kwargs):
-        print(self.guest_set)
-    
+        print(f"saving reservation {self.guest_set}")
+        super(Reservation, self).save(*args, **kwargs) 
 
 class Guest(models.Model):
     guest_name = models.TextField()

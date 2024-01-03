@@ -63,9 +63,7 @@ class ReservationForm(forms.ModelForm):
         instance = super(ReservationForm, self).save(commit=False)
         instance.save()
         # Clear the association for existing guests
-        print(instance)
-        print(self.cleaned_data)
-        print(self.fields)
+        # print(instance)
         for guest in self.cleaned_data['guests']:
             guest.reservation = instance
             guest.save()
@@ -80,7 +78,7 @@ class ReservationAdmin(ImportExportMixin, admin.ModelAdmin):
     raw_id_fields = ['location']
 
     def save_model(self, request, obj, form, change):
-        print(obj)
+        # print(obj)
         super().save_model(request, obj, form, change)
 
 admin.site.register(Guest, GuestAdmin)
