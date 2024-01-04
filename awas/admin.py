@@ -69,6 +69,7 @@ class LocationAdmin(ImportExportMixin, admin.ModelAdmin):
     inlines = [GuestAdminInline]
     list_display = ['description', 'address', 'awas_incharge']
     search_fields = ['description', 'address', 'awas_incharge']
+    readonly_fields = ('reserved',)
     # resource_class = LocationResource
 
 

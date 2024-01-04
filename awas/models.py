@@ -24,6 +24,7 @@ class Location(models.Model):
     checkin_time = models.TimeField(null=True, blank=True)
     checkout_time = models.TimeField(null=True, blank=True)
     map_link = models.URLField(null=True, blank=True)
+    reserved = models.IntegerField(default=0)
 
     def __str__(self):
         return self.description + self.address
@@ -50,6 +51,20 @@ class Guest(models.Model):
     mandal = models.TextField(null=True, blank=True)
     # reservation = models.ForeignKey(Reservation, on_delete=models.PROTECT, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        curr_guest = Guest.objects.filter(id=self.id).first()
+        if curr_guest is not None:
+            curr_location = curr_guest.location
+            curr_no_of_persons = curr_guest.no_of_persons
+            if curr_location is not None:
+                curr_location.reserved -= curr_no_of_persons
+                curr_location.save()
+        if self.location is not None:
+            print(self.location)      
+            self.location.reserved += self.no_of_persons
+            self.location.save()
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return self.guest_name
 

@@ -6,8 +6,11 @@ import json
 
 @shared_task
 def sync_guests_with_registration():
+    i = 0
     user_registrations = UserRegistration.objects.using('remote').all()
     for user_registration in user_registrations:
+        if user_registration.status != 2 or user_registration.awas_required.lower() != "yes":
+            continue
         try:
             city_name = CitiesLocal.objects.get(id=user_registration.city_id)
         except CitiesLocal.DoesNotExist:
@@ -21,7 +24,7 @@ def sync_guests_with_registration():
         except CountriesLocal.DoesNotExist:
             country_name = ""
 
-        person_count = len(json.loads(user_registration.members_info))
+        person_count = len(json.loads(user_registration.members_info)) + 1
         guest, created = Guest.objects.get_or_create(
             guest_name=" ".join(filter(None, [
                 user_registration.first_name,
