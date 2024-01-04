@@ -172,6 +172,9 @@ class CountriesAdmin(admin.ModelAdmin):
 class UserRegistrationAdmin(admin.ModelAdmin):
     using = 'remote'
 
+    search_fields = ['mobile']
+    list_display = ['first_name', 'middle_name', 'last_name', 'mobile']
+
     def get_queryset(self, request):
         return super(UserRegistrationAdmin, self).get_queryset(request).using(self.using)
 

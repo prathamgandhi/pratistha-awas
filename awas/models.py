@@ -80,6 +80,20 @@ class Cities(models.Model):
     def delete(self, *args, **kwargs):
         return
 
+class CitiesLocal(models.Model):
+    city_code = models.CharField(max_length=10)
+    city_name = models.CharField(max_length=100)
+    city_name_i18n = models.TextField(blank=True, null=True)
+    districts_id = models.IntegerField()
+    states_id = models.IntegerField()
+    status = models.CharField(max_length=1, blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    created_by = models.IntegerField()
+    updated_by = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.city_name
 
 class Countries(models.Model):
     country_name = models.CharField(max_length=64)
@@ -102,6 +116,19 @@ class Countries(models.Model):
     def delete(self, *args, **kwargs):
         return
 
+class CountriesLocal(models.Model):
+    country_name = models.CharField(max_length=64)
+    country_code = models.CharField(max_length=2)
+    country_isd_code = models.CharField(max_length=7, blank=True, null=True)
+    status = models.IntegerField()
+    is_allowed_sms = models.IntegerField()
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    created_by = models.IntegerField()
+    updated_by = models.IntegerField()
+
+    def __str__(self):
+        return self.country_name
 
 class Districts(models.Model):
     state_code = models.CharField(max_length=10, blank=True, null=True)
@@ -123,6 +150,18 @@ class Districts(models.Model):
     def delete(self, *args, **kwargs):
         return
 
+class DistrictsLocal(models.Model):
+    state_code = models.CharField(max_length=10, blank=True, null=True)
+    district_code = models.CharField(max_length=10, blank=True, null=True)
+    district_name = models.CharField(max_length=100)
+    status = models.IntegerField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    created_by = models.IntegerField(blank=True, null=True)
+    updated_by = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.district_name
 
 class States(models.Model):
     state_code = models.CharField(max_length=10, blank=True, null=True)
@@ -143,6 +182,17 @@ class States(models.Model):
     def delete(self, *args, **kwargs):
         return
 
+class StatesLocal(models.Model):
+    state_code = models.CharField(max_length=10, blank=True, null=True)
+    state_name = models.CharField(max_length=100)
+    status = models.IntegerField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    created_by = models.IntegerField(blank=True, null=True)
+    updated_by = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.state_name
 
 class UserRegistration(models.Model):
     mobile = models.CharField(max_length=20, blank=True, null=True)
