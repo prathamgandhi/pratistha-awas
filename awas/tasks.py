@@ -27,15 +27,15 @@ def sync_guests_with_registration():
         person_count = len(json.loads(user_registration.members_info)) + 1
         guest, created = Guest.objects.get_or_create(
             guest_name=" ".join(filter(None, [
-                user_registration.first_name,
-                user_registration.middle_name,
-                user_registration.last_name])),
+                user_registration.first_name.strip(),
+                user_registration.middle_name.strip(),
+                user_registration.last_name.strip()])),
             city=city_name,
             mobile_no=user_registration.mobile,
             remark=user_registration.remarks,
             no_of_persons=person_count,
-            arrival_date=user_registration.arrival_date,
-            departure_date=user_registration.departure_date,
+            arrival_date=user_registration.arrival_date_awas,
+            departure_date=user_registration.departure_date_awas,
             email=user_registration.email,
             ext_reg_no=user_registration.id,
             # language=,

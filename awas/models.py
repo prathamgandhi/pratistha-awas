@@ -14,13 +14,13 @@ from django.db import models
 
 
 class Location(models.Model):
-    description = models.TextField(null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
-    transport = models.TextField(null=True, blank=True)
+    description = models.CharField(null=True, blank=True, max_length=255)
+    address = models.CharField(null=True, blank=True, max_length=255)
+    transport = models.CharField(null=True, blank=True, max_length=255)
     capacity = models.IntegerField(null=True, blank=True)
-    lock_no = models.TextField(null=True, blank=True)
-    awas_incharge = models.TextField(null=True, blank=True)
-    remark = models.TextField(null=True, blank=True)
+    lock_no = models.CharField(null=True, blank=True, max_length=255)
+    awas_incharge = models.CharField(null=True, blank=True, max_length=255)
+    remark = models.CharField(null=True, blank=True, max_length=255)
     checkin_time = models.TimeField(null=True, blank=True)
     checkout_time = models.TimeField(null=True, blank=True)
     map_link = models.URLField(null=True, blank=True)
@@ -35,20 +35,20 @@ class Location(models.Model):
 
 
 class Guest(models.Model):
-    guest_name = models.TextField()
-    city = models.TextField(null=True, blank=True)
+    guest_name = models.CharField(max_length=255)
+    city = models.CharField(null=True, blank=True, max_length=255)
     mobile_no = models.CharField(max_length=10)
     ext_reg_no = models.IntegerField(null=True, blank=True)
     location = models.ForeignKey(Location, on_delete=models.PROTECT, blank=True, null=True)
-    remark = models.TextField(null=True, blank=True)
+    remark = models.CharField(null=True, blank=True, max_length=255)
     no_of_persons = models.IntegerField(null=True, blank=True)
-    arrival_date = models.DateTimeField(null=True, blank=True)
-    departure_date = models.DateTimeField(null=True, blank=True)
+    arrival_date = models.DateField(null=True, blank=True)
+    departure_date = models.DateField(null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    language = models.TextField(null=True, blank=True)
-    state = models.TextField(null=True, blank=True)
-    country = models.TextField(null=True, blank=True)
-    mandal = models.TextField(null=True, blank=True)
+    language = models.CharField(null=True, blank=True, max_length=255)
+    state = models.CharField(null=True, blank=True, max_length=255)
+    country = models.CharField(null=True, blank=True, max_length=255)
+    mandal = models.CharField(null=True, blank=True, max_length=255)
     # reservation = models.ForeignKey(Reservation, on_delete=models.PROTECT, blank=True, null=True)
 
     def save(self, *args, **kwargs):
