@@ -75,19 +75,18 @@ WSGI_APPLICATION = 'pratishtha_awas.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
     'remote': {
-        'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'SongadhAwas',
-        'USER': os.environ['odbc_username'],
-        'PASSWORD': os.environ['odbc_password'],
-        'HOST': '13.235.123.179',
-        'PORT': '6606',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'pratishtha',
+        'USER': os.environ['db_username'],
+        'PASSWORD': os.environ['db_password'],
+        'HOST': os.environ['db_ip'],
+        'PORT': os.environ['db_port'],
     }
 }
 
@@ -122,6 +121,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
