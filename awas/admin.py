@@ -1,6 +1,6 @@
 import os 
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django import forms
 from django.utils.html import format_html, mark_safe
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -21,7 +21,7 @@ from reportlab.lib.units import inch
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
 
-from .utils import ReportTemplate, fill_location_wise_allotment
+from .utils import ReportTemplate, fill_location_wise_allotment, fill_guest_wise_allotment, fill_location_capacity_report, fill_accomodation_slip
 
 # class LocationAdminInline(admin.TabularInline):
 #     model = Location
@@ -67,6 +67,31 @@ class GuestAdmin(ImportExportMixin, admin.ModelAdmin):
     )
     # inlines = [LocationAdminInline]
     resource_class = GuestResource
+    actions = ["generate_guestwise_allotment_report"]
+
+    @admin.action(description="Generate guestwise allotment report")
+    def generate_guestwise_allotment_report(self, request, queryset):
+        story = []
+        story.append(NextPageTemplate('NormalPage'))
+
+        fill_guest_wise_allotment(queryset, story)
+
+        # Create pdf and send response
+        filename = "guest-wise-report.pdf"
+        pdf_directory = "generated_pdfs/"
+        os.makedirs(pdf_directory, exist_ok=True)
+        pdf_file_path = os.path.join(pdf_directory, filename)
+        pdf_buffer = default_storage.open(pdf_file_path, 'wb')
+        pdf_document = ReportTemplate(pdf_buffer, pagesize=letter, report_title='Guestwise Allotment Report')
+        pdf_document.title = "Pratishtha Awas"
+        pdf_document.author = "PPG"
+        pdf_document.build(story)
+        pdf_buffer.close()
+        pdf_buffer = default_storage.open(pdf_file_path, 'rb')
+        response = HttpResponse(pdf_buffer, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="guest-wise-report.pdf"'
+
+        return response
 
 class GuestAdminInline(admin.TabularInline):
     model = Guest
@@ -88,7 +113,64 @@ class LocationAdmin(ImportExportMixin, admin.ModelAdmin):
     search_fields = ['description', 'address', 'awas_incharge']
     readonly_fields = ('reserved',)
 
-    actions = ["generate_location_report"]
+    actions = [
+        "generate_location_report",
+        "location_capacity_report",
+        "generate_accomodation_slip",   
+    ]
+
+    @admin.action(description="Generate Accomodation Slip")
+    def generate_accomodation_slip(self, request, queryset):
+        if queryset.count() != 1:
+            messages.error(request, "Can not export more than one object to csv at once.")
+            return
+        
+        story = []
+        story.append(NextPageTemplate('NormalPage'))
+
+        fill_accomodation_slip(queryset, story)
+
+        # Create pdf and send response
+        filename = "accomodation_slip.pdf"
+        pdf_directory = "generated_pdfs/"
+        os.makedirs(pdf_directory, exist_ok=True)
+        pdf_file_path = os.path.join(pdf_directory, filename)
+        pdf_buffer = default_storage.open(pdf_file_path, 'wb')
+        pdf_document = ReportTemplate(pdf_buffer, pagesize=letter, report_title='Accomodation Slip')
+        pdf_document.title = "Pratishtha Awas"
+        pdf_document.author = "PPG"
+        pdf_document.build(story)
+        pdf_buffer.close()
+        pdf_buffer = default_storage.open(pdf_file_path, 'rb')
+        response = HttpResponse(pdf_buffer, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="accomodation_slip.pdf"'
+
+        return response
+
+    @admin.action(description="Generate Location Capacity Report")
+    def location_capacity_report(self, request, queryset):
+        story = []
+        story.append(NextPageTemplate('NormalPage'))
+
+        fill_location_capacity_report(queryset, story)
+
+        # Create pdf and send response
+        filename = "location-capacity-report.pdf"
+        pdf_directory = "generated_pdfs/"
+        os.makedirs(pdf_directory, exist_ok=True)
+        pdf_file_path = os.path.join(pdf_directory, filename)
+        pdf_buffer = default_storage.open(pdf_file_path, 'wb')
+        pdf_document = ReportTemplate(pdf_buffer, pagesize=letter, report_title='Location Capacity Report')
+        pdf_document.title = "Pratishtha Awas"
+        pdf_document.author = "PPG"
+        pdf_document.build(story)
+        pdf_buffer.close()
+        pdf_buffer = default_storage.open(pdf_file_path, 'rb')
+        response = HttpResponse(pdf_buffer, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="location-capacity-report.pdf"'
+
+        return response
+
 
     @admin.action(description="Generate Locationwise allotment report")
     def generate_location_report(self, request, queryset):
@@ -104,7 +186,9 @@ class LocationAdmin(ImportExportMixin, admin.ModelAdmin):
         os.makedirs(pdf_directory, exist_ok=True)
         pdf_file_path = os.path.join(pdf_directory, filename)
         pdf_buffer = default_storage.open(pdf_file_path, 'wb')
-        pdf_document = ReportTemplate(pdf_buffer, pagesize=letter)
+        pdf_document = ReportTemplate(pdf_buffer, pagesize=letter, report_title='Locationwise Allotment Report')
+        pdf_document.title = "Pratishtha Awas"
+        pdf_document.author = "PPG"
         pdf_document.build(story)
         pdf_buffer.close()
         pdf_buffer = default_storage.open(pdf_file_path, 'rb')
