@@ -14,12 +14,14 @@ from import_export.widgets import ForeignKeyWidget
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.platypus import Table, TableStyle, Paragraph, Spacer, NextPageTemplate, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
+
+from .utils import ReportTemplate, fill_location_wise_allotment
 
 # class LocationAdminInline(admin.TabularInline):
 #     model = Location
@@ -90,53 +92,20 @@ class LocationAdmin(ImportExportMixin, admin.ModelAdmin):
 
     @admin.action(description="Generate Locationwise allotment report")
     def generate_location_report(self, request, queryset):
+
+        story = []       
+        story.append(NextPageTemplate('NormalPage'))
+
+        fill_location_wise_allotment(queryset, story)        
+
+        # Create pdf and send response
         filename = "location-wise-report.pdf"
         pdf_directory = "generated_pdfs/"
         os.makedirs(pdf_directory, exist_ok=True)
         pdf_file_path = os.path.join(pdf_directory, filename)
         pdf_buffer = default_storage.open(pdf_file_path, 'wb')
-        pdf_document = SimpleDocTemplate(pdf_buffer, pagesize=letter)
-
-        elements = []
-        style = TableStyle([
-                            ('TEXTCOLOR', (0, 0), (-1, 0), (0, 0, 0)),
-                            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica'),
-                            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                        ])
-
-        table_data = [['Reg#', 'Name', "City", "Mobile No.", "Arrival", "Depart", "Persons"]]
-        table = Table(table_data, colWidths=[1*inch]*7)
-        table.setStyle(style)
-        elements.append(table)
-        styles = getSampleStyleSheet()
-        for location in queryset:
-            guests = location.guest_set.all()
-            if guests.count() == 0:
-                continue
-
-            elements.append(Paragraph(location.description, styles['Normal']))
-            elements.append(Spacer(1, 12))  
-            guest_data_table = []
-            for guest in guests:
-                guest_data = model_to_dict(guest)
-                guest_data_table.append([
-                        guest_data['ext_reg_no'],
-                        guest_data['guest_name'], 
-                        guest_data['city'],
-                        guest_data['mobile_no'],
-                        guest_data['arrival_date'],
-                        guest_data['departure_date'],
-                        guest_data['no_of_persons'],
-                    ])
-            if len(guest_data_table) != 0:
-                table = Table(guest_data_table)
-                table.setStyle(style)
-                elements.append(table)
-
-        pdf_document.build(elements)
-
-        # Close the buffer
+        pdf_document = ReportTemplate(pdf_buffer, pagesize=letter)
+        pdf_document.build(story)
         pdf_buffer.close()
         pdf_buffer = default_storage.open(pdf_file_path, 'rb')
         response = HttpResponse(pdf_buffer, content_type='application/pdf')
