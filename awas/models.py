@@ -27,7 +27,7 @@ class Location(models.Model):
     reserved = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.description + self.address
+        return str(self.description) + str(self.address)
 
     class Meta:
         verbose_name = 'Location'
