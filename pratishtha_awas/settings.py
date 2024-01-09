@@ -11,10 +11,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside /datthe project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+dotenv_path = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -75,18 +79,19 @@ WSGI_APPLICATION = 'pratishtha_awas.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
     'remote': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pratishtha',
-        'USER': os.environ['db_username'],
-        'PASSWORD': os.environ['db_password'],
-        'HOST': os.environ['db_ip'],
-        'PORT': os.environ['db_port'],
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'SongadhAwas',
+        'USER': os.getenv('odbc_username'),
+        'PASSWORD': os.getenv('odbc_password'),
+        'HOST': '13.235.123.179',
+        'PORT': '6606',
     }
 }
 
@@ -121,7 +126,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
