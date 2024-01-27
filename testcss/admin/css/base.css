@@ -98,7 +98,7 @@ header {
 h1 {
     margin: 0 0 20px;
     font-weight: 300;
-    font-size: 2rem;  /* Larger font size for headlines */
+    font-size: 20px;  /* Larger font size for headlines */
     color: var(--body-quiet-color);
 }
 
@@ -511,6 +511,7 @@ input[type=button][disabled].default {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     margin-bottom: 30px;
+    margin-top: 20px;
     background: var(--darkened-bg); /* Slightly darker background */
     padding: 20px; /* Increased padding for better spacing */
 }
@@ -646,6 +647,7 @@ a.deletelink:hover {
     float: right;
     position: relative;
     margin-top: -32px; /* Adjusted margin top */
+    margin-bottom: 10px;
 }
 
 .object-tools li {
@@ -670,6 +672,7 @@ a.deletelink:hover {
     text-transform: uppercase;
     letter-spacing: 1px; /* Adjusted letter spacing */
     transition: background-color 0.15s;
+    
 }
 
 .object-tools a:focus, .object-tools a:hover {
@@ -830,9 +833,29 @@ a.deletelink:hover {
     color: var(--header-branding-color);
 }
 
+#header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logo-container {
+    margin-right: 10px;
+    /* border: 1px solid red; */
+    /* padding: 5px;  */
+}
+
+#logo-container img {
+    height: 80px;;
+    width: 80px;
+    /* border: 1px solid blue; */
+}
+
+
 #site-name a:link,
 #site-name a:visited {
     color: var(--accent);
+    padding: 10px;
 }
 
 #branding h2 {
@@ -893,11 +916,14 @@ a.deletelink:hover {
 
 /* SIDEBAR */
 #content-related {
-    background: var(--darkened-bg);
+    background: none;
 }
 
 #content-related .module {
-    background: none;
+    background: var(--darkened-bg);
+    float:right;
+    margin-right: -60px; 
+    padding: 16px; 
 }
 
 #content-related h3 {
@@ -934,6 +960,8 @@ a.deletelink:hover {
     font-size: 1.125rem;
     color: var(--body-fg);
 }
+
+
 
 .delete-confirmation form input[type="submit"] {
     background: var(--delete-button-bg);
