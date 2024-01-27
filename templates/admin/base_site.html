@@ -1,0 +1,16 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<div id="header-container">
+  <div id="site-name">Songadh Pratistha Awas<a href="{% url 'admin:index' %}"></a></div>
+  <div id="logo-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGcRDP48-HyTYfEZaNjYh-wHthq7K5z2c8c7AnX56AJyyK-Jc0oqqhbNpAACM7_8YJAyw&usqp=CAU" alt=""></div>
+</div>
+
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
