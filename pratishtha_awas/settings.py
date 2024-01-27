@@ -88,13 +88,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
-    'remote': {
-        'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'SongadhAwas',
-        'USER': os.getenv('odbc_username'),
-        'PASSWORD': os.getenv('odbc_password'),
-        'HOST': '13.235.123.179',
-        'PORT': '6606',
+   'remote': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'pratishtha',
+        'USER': os.environ['db_username'],
+        'PASSWORD': os.environ['db_password'],
+        'HOST': os.environ['db_ip'],
+        'PORT': os.environ['db_port'],
     }
 }
 
@@ -152,3 +152,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # # STATIC_ROOT = os.path.join('../', 'staticfiles')
 # STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
